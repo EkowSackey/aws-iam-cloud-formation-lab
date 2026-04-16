@@ -15,7 +15,7 @@ Parameters:
   GitHubOwner:
     Type: String
     Description: GitHub username or organization name
-    Default: your-github-username
+    Default: EkowSackey
   
   GitHubRepo:
     Type: String
