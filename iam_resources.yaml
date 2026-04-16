@@ -1,32 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'IAM Automation Lab - Creates IAM users, groups, and permissions with auto-generated password stored in Secrets Manager'
 
-Metadata:
-  AWS::CloudFormation::Interface:
-    ParameterGroups:
-      - Label:
-          default: "Git Repository Configuration"
-        Parameters:
-          - GitHubOwner
-          - GitHubRepo
-          - GitHubBranch
-
-Parameters:
-  GitHubOwner:
-    Type: String
-    Description: GitHub username or organization name
-    Default: EkowSackey
-  
-  GitHubRepo:
-    Type: String
-    Description: GitHub repository name
-    Default: aws-iam-cloudformation-lab
-  
-  GitHubBranch:
-    Type: String
-    Description: Branch to sync from
-    Default: main
-
 Resources:
   # ===== SECRETS MANAGER: Auto-generated temporary password =====
   # This creates a random password and stores it securely
@@ -175,4 +149,4 @@ Outputs:
 
   PasswordRetrievalCommand:
     Description: AWS CLI command to retrieve the temporary password
-    Value: !Sub 'aws secretsmanager get-secret-value --secret-id ${TemporaryPassword} --query SecretString --output text | jq -r .password'
+    Value: !Sub 'aws secretsmanager get-secret-value --secret-id ${TemporaryPassword} --query SecretString --output text'
