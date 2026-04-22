@@ -52,6 +52,30 @@ Resources:
                   - ec2:CreateTags
                 Resource: '*'
 
+  # ===== PERMISSION BOUNDARY =====
+  # Defines the maximum permissions ec2-user2 can ever have.
+  # Even if a group policy grants RunInstances, this boundary
+  # caps the user to read-only EC2 actions only.
+  EC2User2PermissionBoundary:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: EC2-ReadOnly-Boundary
+      Description: Permission boundary that caps ec2-user2 to read-only EC2 access
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:DescribeInstances
+              - ec2:DescribeInstanceStatus
+              - ec2:DescribeInstanceTypes
+              - ec2:DescribeImages
+              - ec2:DescribeKeyPairs
+              - ec2:DescribeSecurityGroups
+              - ec2:DescribeSubnets
+              - ec2:DescribeVpcs
+            Resource: '*'
+
   # ===== IAM USER: ec2-user1 =====
   # First EC2 user with full EC2 group permissions
   EC2User1:
@@ -77,27 +101,17 @@ Resources:
       UserName: ec2-user2
       Groups:
         - !Ref EC2UserGroup
+      PermissionsBoundary: !Ref EC2User2PermissionBoundary
       LoginProfile:
         Password: !Sub '{{resolve:secretsmanager:${TemporaryPassword}:SecretString:password}}'
         PasswordResetRequired: true
-      Policies:
-        # Explicit DENY policy that overrides group permissions
-        # This prevents ec2-user2 from creating EC2 instances
-        - PolicyName: Deny-EC2-Creation
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Deny
-                Action:
-                  - ec2:RunInstances
-                Resource: '*'
       Tags:
         - Key: Purpose
           Value: IAM-Automation-Lab
         - Key: Group
           Value: EC2-Users
         - Key: Restriction
-          Value: Cannot-Create-Instances
+          Value: Boundary-Caps-To-ReadOnly
 
   # ===== IAM USER: s3-user =====
   # S3 user with read-only S3 permissions
