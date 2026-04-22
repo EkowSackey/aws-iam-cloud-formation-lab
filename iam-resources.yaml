@@ -92,7 +92,7 @@ Resources:
           Value: EC2-Users
 
   # ===== IAM USER: ec2-user2 =====
-  # Second EC2 user with RESTRICTED permissions (cannot create instances)
+  # Second EC2 user with RESTRICTED permissions 
   EC2User2:
     Type: AWS::IAM::User
     Properties:
