@@ -4,7 +4,6 @@ Description: 'IAM Automation Lab - Creates IAM users, groups, and permissions wi
 Resources:
   # ===== SECRETS MANAGER: Auto-generated temporary password =====
   # This creates a random password and stores it securely
-  # All three IAM users will use this as their initial password
   TemporaryPassword:
     Type: AWS::SecretsManager::Secret
     Properties:
