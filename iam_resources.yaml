@@ -53,8 +53,7 @@ Resources:
 
   # ===== PERMISSION BOUNDARY =====
   # Defines the maximum permissions ec2-user2 can ever have.
-  # Even if a group policy grants RunInstances, this boundary
-  # caps the user to read-only EC2 actions only.
+  # this boundarycaps the user to read-only EC2 actions only.
   EC2User2PermissionBoundary:
     Type: AWS::IAM::ManagedPolicy
     Properties:
